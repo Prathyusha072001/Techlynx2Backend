@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mysql from "mysql2/promise";
 import careerRoutes from "./routes/careers.js";
-import { sendApplicationEmails } from "../mailer.js";
+
 
 dotenv.config();
 const app = express();
@@ -49,14 +49,7 @@ app.post("/enroll", async (req, res) => {
       [name, email, phone || null, course, mode, message || null]
     );
 
-    // ✅ Send emails
-    await sendApplicationEmails({
-      applicantEmail: email,
-      applicantName: name,
-      hrEmail: process.env.HR_EMAIL,
-      position: `Course Enrollment: ${course}`,
-      formData: { name, email, phone, course, mode, message },
-    });
+    
 
     return res.json({ success: true, id: result.insertId });
   } catch (err) {
@@ -88,15 +81,7 @@ app.post("/api/contact", async (req, res) => {
       [name, email, message]
     );
 
-    // ✅ Send emails
-    await sendApplicationEmails({
-      applicantEmail: email,
-      applicantName: name,
-      hrEmail: process.env.HR_EMAIL,
-      position: "Connect With Us",
-      formData: { name, email, message },
-    });
-
+   
     res.status(201).json({ message: "✅ Message saved successfully!" });
   } catch (err) {
     console.error("Error inserting data:", err);
@@ -123,14 +108,7 @@ app.post("/api/contact-form", async (req, res) => {
       [firstName, lastName, email, phone, address, course, message]
     );
 
-    // ✅ Send emails
-    await sendApplicationEmails({
-      applicantEmail: email,
-      applicantName: `${firstName} ${lastName}`,
-      hrEmail: process.env.HR_EMAIL,
-      position: "Contact Form",
-      formData: { firstName, lastName, email, phone, address, course, message },
-    });
+    
 
     res.status(200).json({ message: "✅ Message saved successfully" });
   } catch (err) {
@@ -183,27 +161,7 @@ app.post("/feedback", async (req, res) => {
       ]
     );
 
-    // ✅ Send emails
-    await sendApplicationEmails({
-      applicantEmail: email,
-      applicantName: name,
-      hrEmail: process.env.HR_EMAIL,
-      position: "Feedback Submission",
-      formData: {
-        name,
-        email,
-        category,
-        overall_rating,
-        course_quality,
-        teaching_method,
-        support_staff,
-        value_for_money,
-        recommendation,
-        overall_experience,
-        detailed_feedback,
-        suggestions,
-      },
-    });
+    
 
     res.json({ message: "✅ Feedback submitted successfully!" });
   } catch (err) {
